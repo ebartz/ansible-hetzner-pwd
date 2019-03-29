@@ -1,0 +1,49 @@
+---
+- name: Install go-dep
+  apt:
+    name: "go-dep"
+    state: present
+    update_cache: yes
+  become: yes
+
+- name: Install docker-compose
+  shell: curl -L "https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  become: yes
+
+- name: Set docker-compose permissions
+  shell: chmod +x /usr/local/bin/docker-compose
+  become: yes
+
+- name: Run Docker Swarm Init
+  shell: docker swarm init
+  become: yes
+
+- name: Git clone Docker PWD
+  git:
+    force: yes
+    repo: 'https://github.com/play-with-docker/play-with-docker.git'
+    dest: /root/go/src/github.com/play-with-docker/play-with-docker
+
+- name: Run go dep
+  shell: cd /root/go/src/github.com/play-with-docker/play-with-docker && dep ensure
+  environment:
+    GOPATH: /root/go
+
+- name: Replace localhost in config.go of PWD
+  replace:
+    path: /root/go/src/github.com/play-with-docker/play-with-docker/config/config.go
+    regexp: 'localhost'
+    replace: 'pwd.sva.hamburg'
+    backup: no
+
+- name: Docker pull franela/dind
+  shell: docker pull franela/dind
+  environment:
+    GOPATH: /root/go
+
+- name: Run docker compose
+  shell: docker-compose up -d
+  args:
+    chdir: /root/go/src/github.com/play-with-docker/play-with-docker
+  environment:
+    GOPATH: /root/go

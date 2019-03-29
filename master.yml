@@ -1,0 +1,11 @@
+---
+- hosts: pwd-master
+  remote_user: root
+  roles:
+    - master
+
+      #- hosts: kube-worker-*
+  #  remote_user: root
+  #tasks:
+  #  - name: join the cluster
+  #    shell: "{{ hostvars['kube-master']['cluster_command'] }} --worker"

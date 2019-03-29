@@ -1,0 +1,34 @@
+---
+- name: build list of workers
+  debug:
+    msg: "pwd-worker-{{ item }}"
+  loop: "{{ range(0, hetzner_worker_count)|list }}"
+  register: workernames
+
+- set_fact:
+    workernames: "{{ workernames.results | map(attribute='msg') | list }}"
+
+- set_fact: 
+    kubemaster:
+      - pwd-master
+
+- module_defaults:
+    hcloud_server:
+      token: "{{ lookup('env','HCLOUD_TOKEN') | default(hetzner_token, true) }}"
+      image: "{{ hetzner_instance_os }}"
+      server_type: "{{ hetzner_instance_type }}"
+      datacenter: "{{ hetzner_datacenter }}"
+      ssh_keys: "{{ hetzner_ssh_keys }}"
+  block:
+    - hcloud_server:
+        name: "{{ kubemaster + workernames }}"
+
+- name: Refresh inventory
+  meta: refresh_inventory
+
+- name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+  wait_for:
+    port: 22
+    host: "{{kubemaster}}"
+    search_regex: OpenSSH
+    delay: 10
