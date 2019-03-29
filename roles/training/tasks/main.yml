@@ -1,0 +1,65 @@
+---
+
+- name: install git
+  package:
+    name: git
+
+- name: install docker python library
+  package:
+    name: '{{ item }}'
+  with_items:
+    - python-docker
+    - python3-docker
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: install docker python library
+  package:
+    name: '{{ item }}'
+  with_items:
+    - python2-docker
+    - python3-docker
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: clone pwd training repo
+  git:
+    repo: '{{ pwd_training_git_url }}'
+    dest: '{{ pwd_training_git_dir }}'
+
+- name: copy default pwd training config
+  copy:
+    src: '{{ pwd_training_jekyll_defaults }}'
+    dest: '{{ pwd_training_jekyll_config }}'
+    remote_src: yes
+    force: no
+
+- replace:
+    path: '{{ pwd_training_jekyll_config }}'
+    regexp: '^url: *(.*) *$'
+    replace: 'url: {{ pwd_training_url }}'
+
+- replace:
+    path: '{{ pwd_training_jekyll_config }}'
+    regexp: '^pwdurl: *(.*) *$'
+    replace: 'pwdurl: {{ pwd_url }}'
+
+- name: create generated site folder
+  file:
+    path: '{{ pwd_training_git_dir }}/_site'
+    state: directory
+    owner: 1000
+    group: 1000
+
+- name: run training docker compose definition
+  docker_service:
+    project_name: pwd-training
+    recreate: always
+    definition:
+      version: '3'
+      services:
+        jekyll:
+          image: 'jekyll/jekyll:3'
+          volumes:
+            - '{{ pwd_training_git_dir }}:/srv/jekyll'
+          ports:
+            - '80:4000'
+          command: 'jekyll serve --config config.yml'

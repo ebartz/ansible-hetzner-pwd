@@ -1,0 +1,8 @@
+pwd_url: 'http://pwd.sva.hamburg'
+
+pwd_training_url: 'http://training.sva.hamburg'
+pwd_training_git_url: 'https://github.com/play-with-docker/play-with-docker.github.io.git'
+pwd_training_git_dir: '/srv/training'
+pwd_training_jekyll_defaults: '{{ pwd_training_git_dir }}/_config.yml'
+pwd_training_jekyll_config: '{{ pwd_training_git_dir }}/config.yml'
+

@@ -1,0 +1,5 @@
+---
+- hosts: training.sva.hamburg
+  remote_user: root
+  roles:
+    - training
