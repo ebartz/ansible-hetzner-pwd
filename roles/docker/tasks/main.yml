@@ -2,3 +2,7 @@
 - name: 'install docker'
   shell: 'curl https://releases.rancher.com/install-docker/18.09.sh | sh'
 
+- name: 'install docker compose'
+  package:
+    name: 'docker-compose'
+
