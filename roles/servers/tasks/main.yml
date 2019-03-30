@@ -32,3 +32,21 @@
     host: "{{kubemaster}}"
     search_regex: OpenSSH
     delay: 10
+
+- cloudflare_dns:
+    zone: {{ cloudflare_dns_zone }}
+    record: pwd
+    type: A
+    value: # 
+    account_email: {{ cloudflare_mail  }}
+    account_api_token: {{ cloudflare_token }}
+  register: record
+
+- cloudflare_dns:
+    zone: {{ cloudflare_dns_zone }}
+    record: training
+    type: A
+    value: # 
+    account_email: {{ cloudflare_mail  }}
+    account_api_token: {{ cloudflare_token }}
+  register: record
