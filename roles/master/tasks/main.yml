@@ -36,6 +36,13 @@
     replace: 'pwd.sva.hamburg'
     backup: no
 
+- name: Replace localhost in bootstrap.go of PWD
+  replace:
+    path: /root/go/src/github.com/play-with-docker/play-with-docker/handlers/bootstrap.go
+    regexp: 'localhost'
+    replace: 'sva.hamburg'
+    backup: no
+
 - name: Docker pull franela/dind
   shell: docker pull franela/dind
   environment:
