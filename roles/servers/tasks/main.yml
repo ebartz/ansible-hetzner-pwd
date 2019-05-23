@@ -1,16 +1,4 @@
 ---
-- name: build list of workers
-  debug:
-    msg: "pwd-worker-{{ item }}"
-  loop: "{{ range(0, hetzner_worker_count)|list }}"
-  register: workernames
-
-- set_fact:
-    workernames: "{{ workernames.results | map(attribute='msg') | list }}"
-
-- set_fact: 
-    kubemaster:
-      - pwd-master
 
 - module_defaults:
     hcloud_server:
