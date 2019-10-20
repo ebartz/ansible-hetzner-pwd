@@ -26,10 +26,3 @@
     search_regex: OpenSSH
     delay: 10
 
-- name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
-  wait_for:
-    port: 22
-    host: "training.sva.hamburg"
-    search_regex: OpenSSH
-    delay: 10
-
