@@ -9,7 +9,12 @@
       ssh_keys: "{{ hetzner_ssh_keys }}"
   block:
     - hcloud_server:
-        name: "{{ kubemaster + workernames }}"
+        name: 'pwd.sva.hamburg'
+        server_type: 'ccx51'
+    - hcloud_server:
+        name: 'training.sva.hamburg'
+        server_type: 'cx31'
+
 
 - name: Refresh inventory
   meta: refresh_inventory
@@ -17,24 +22,14 @@
 - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
   wait_for:
     port: 22
-    host: "{{kubemaster}}"
+    host: "pwd.sva.hamburg"
     search_regex: OpenSSH
     delay: 10
 
-- cloudflare_dns:
-    zone: {{ cloudflare_dns_zone }}
-    record: pwd
-    type: A
-    value: # 
-    account_email: {{ cloudflare_mail  }}
-    account_api_token: {{ cloudflare_token }}
-  register: record
+- name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
+  wait_for:
+    port: 22
+    host: "training.sva.hamburg"
+    search_regex: OpenSSH
+    delay: 10
 
-- cloudflare_dns:
-    zone: {{ cloudflare_dns_zone }}
-    record: training
-    type: A
-    value: # 
-    account_email: {{ cloudflare_mail  }}
-    account_api_token: {{ cloudflare_token }}
-  register: record
