@@ -7,12 +7,13 @@
       server_type: "{{ hetzner_instance_type }}"
       datacenter: "{{ hetzner_datacenter }}"
       ssh_keys: "{{ hetzner_ssh_keys }}"
+      state: "present"
   block:
     - hcloud_server:
-        name: 'pwd.sva.hamburg'
+        name: 'pwd.sva.dev'
         server_type: 'ccx51'
     - hcloud_server:
-        name: 'training.sva.hamburg'
+        name: 'training.sva.dev'
         server_type: 'cx31'
 
 
@@ -22,7 +23,7 @@
 - name: Wait 300 seconds for port 22 to become open and contain "OpenSSH"
   wait_for:
     port: 22
-    host: "pwd.sva.hamburg"
+    host: "pwd.sva.dev"
     search_regex: OpenSSH
     delay: 10
 

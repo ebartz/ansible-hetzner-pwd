@@ -6,3 +6,6 @@
   package:
     name: 'docker-compose'
 
+- name: 'install git'
+  package:
+    name: 'git'

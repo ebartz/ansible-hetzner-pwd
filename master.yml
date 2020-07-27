@@ -1,5 +1,5 @@
 ---
-- hosts: pwd.sva.hamburg
+- hosts: pwd.sva.dev
   remote_user: root
   roles:
     - master

@@ -23,7 +23,7 @@
     force: yes
     repo: 'https://github.com/play-with-docker/play-with-docker.git'
     dest: /root/go/src/github.com/play-with-docker/play-with-docker
-    #    version: '1bee95e8620613571d891d577c79ea1d23212c9f'
+    version: '1bee95e8620613571d891d577c79ea1d23212c9f'
 
 - name: Run go dep
   shell: cd /root/go/src/github.com/play-with-docker/play-with-docker && dep ensure
@@ -34,14 +34,14 @@
   replace:
     path: /root/go/src/github.com/play-with-docker/play-with-docker/config/config.go
     regexp: 'localhost'
-    replace: 'pwd.sva.hamburg'
+    replace: 'pwd.sva.dev'
     backup: no
 
 - name: Replace localhost in bootstrap.go of PWD
   replace:
     path: /root/go/src/github.com/play-with-docker/play-with-docker/handlers/bootstrap.go
     regexp: 'localhost'
-    replace: 'sva.hamburg'
+    replace: 'sva.dev'
     backup: no
 
 - name: Docker pull franela/dind
